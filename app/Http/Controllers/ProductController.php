@@ -8,10 +8,20 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     // Show a list of all products
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('products.index', compact('products'));
+        // Retrieve the search query from the request
+        $search = $request->get('search');
+
+        // Query the products, applying the search filter if provided
+        $products = Product::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('description', 'like', '%' . $search . '%');
+        })
+        ->paginate(10); // Paginate with 10 products per page
+
+        // Return the view with products and the search query
+        return view('products.index', compact('products', 'search'));
     }
     // Show a single product's details
     public function show($id)
@@ -44,20 +54,26 @@ class ProductController extends Controller
     // Update a product in the database
     public function update(Request $request, $id)
     {
-        $request->validate([
-        'name' => 'required|max:255',
-        'description' => 'required',
-        'price' => 'required|numeric',
-        ]);
         $product = Product::findOrFail($id);
-        $product->update($request->all());
-        return redirect()->route('products.index');
+
+        // Validate incoming data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+        ]);
+        // Update product details
+        $product->name = $validated['name'];
+        $product->description = $validated['description'];
+        $product->price = $validated['price'];
+        $product->save();
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');    
     }
     // Delete a product
         public function destroy($id)
         {
         $product = Product::findOrFail($id);
         $product->delete();
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }
