@@ -17,12 +17,6 @@
     <!-- Product List -->
     <h1>Product List</h1>
     <a href="{{ route('products.create') }}" class="btn btn-primary">Create New Product</a>
-    <form action="{{ route('products.index') }}" method="GET" class="mt-3">
-        <div class="input-group mb-3">
-            <input type="text" name="search" class="form-control" placeholder="Search products..." value="{{ request('search') }}">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </div>
-    </form>
     <ul>
         @foreach($products as $product)
             <li>
