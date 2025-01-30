@@ -5,27 +5,28 @@ ul {
     background-color: #f8f9fa;
     padding: 15px;
     border-radius: 8px;
+    list-style-type: none;
 }
 
 /* Customize the button appearance */
 .btn-primary {
-background-color: #5a67d8;
-border-color: #5a67d8;
+    background-color: #5a67d8;
+    border-color: #5a67d8;
 }
 
 .btn-primary:hover {
-background-color: #4c51bf;
-border-color: #4c51bf;
+    background-color: #4c51bf;
+    border-color: #4c51bf;
 }
 
 /* Customize the delete button */
 .btn-danger {
-background-color: #e53e3e;
-border-color: #e53e3e;
+    background-color: #e53e3e;
+    border-color: #e53e3e;
 }
 
 .btn-danger:hover {
-background-color: #c53030;
-border-color: #c53030;
+    background-color: #c53030;
+    border-color: #c53030;
 }
   

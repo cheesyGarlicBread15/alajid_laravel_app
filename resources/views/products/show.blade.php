@@ -7,7 +7,7 @@
     <strong>Description:</strong> {{ $product->description }}
 </div>
 <div>
-    <strong>Price:</strong> ${{ number_format($product->price, 2) }}
+    <strong>Price:</strong> ₱{{ number_format($product->price, 2) }}
 </div>
 
 <a href="{{ route('products.index') }}">Back to Product List</a>
