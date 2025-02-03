@@ -54,6 +54,7 @@ class ProductController extends Controller
     // Update a product in the database
     public function update(Request $request, $id)
     {
+        dd($request->all());
         $product = Product::findOrFail($id);
 
         // Validate incoming data

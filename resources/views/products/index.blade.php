@@ -1,5 +1,92 @@
 @extends('layouts.app')
 @section('content')
+<style>
+  /* Pagination container */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  /* Pagination links */
+  .pagination a,
+  .pagination span {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  /* Pagination hover state */
+  .pagination a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
+
+  /* Active page link */
+  .pagination .active span {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
+
+  /* Disabled page link */
+  .pagination .disabled span {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #ddd;
+    cursor: not-allowed;
+  }
+
+  /* First and last page links */
+  .pagination .first,
+  .pagination .last {
+    background-color: #f8f9fa;
+    color: #007bff;
+    font-weight: bold;
+    border-radius: 50px;
+  }
+
+  /* Add arrows to first and last links */
+  .pagination .first::before {
+    content: '<<';
+    margin-right: 8px;
+  }
+
+  .pagination .last::after {
+    content: '>>';
+    margin-left: 8px;
+  }
+
+  /* Pagination on mobile devices */
+  @media (max-width: 576px) {
+    .pagination {
+      gap: 8px;
+    }
+
+    .pagination a,
+    .pagination span {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    /* Reduce size of first and last page buttons on small screens */
+    .pagination .first::before,
+    .pagination .last::after {
+      font-size: 12px;
+    }
+  }
+</style>
 <!-- Search Form -->
 <form action="{{ route('products.index') }}" method="GET" class="mt-3">
   <div class="input-group mb-3">
@@ -41,9 +128,11 @@
 </ul>
 
 <!-- Pagination Links -->
+<!-- Pagination Links -->
 <div class="mt-3">
-  {{ $products->appends(['search' => request('search')])->links() }}
+  {{ $products->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
 </div>
+
 
 <!-- Success Message -->
 @if(session('success'))
