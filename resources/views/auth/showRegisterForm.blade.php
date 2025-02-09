@@ -7,29 +7,30 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h3 class="text-center mb-4">Register</h3>
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                     
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
                     <form action="{{ route('auth.register') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="first_name" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="last_name" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ old('last_name') }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
@@ -43,8 +44,8 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-control" id="role" name="role" required>
-                                <option value="Admin">Admin</option>
-                                <option value="User">User</option>
+                                <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="User" {{ old('role') == 'User' ? 'selected' : '' }}>User</option>
                             </select>
                         </div>
                         <div class="d-grid">
@@ -52,7 +53,7 @@
                         </div>
                     </form>
                     <p class="mt-3 text-center">
-                        Already have an account? 
+                        Already have an account?
                         <a href="{{ route('auth.showLoginForm') }}" class="text-primary">Login Here.</a>
                     </p>
                 </div>

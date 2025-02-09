@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script>
-          function confirmLogout() {
+        function confirmLogout() {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You will be logged out!",
@@ -26,7 +27,8 @@
         }
     </script>
 </head>
-<body>    
+
+<body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand ms-4" href="#">Alajid</a>
@@ -45,7 +47,7 @@
                         <a class="nav-link" href="{{ route('users.index') }}">Users</a>
                     </li>
                 </ul>
-                
+
                 <!-- Push Logout button towards right but not too far -->
                 <div class="ms-auto me-4">
                     <button class="btn btn-danger" onclick="confirmLogout()">Logout</button>
@@ -54,10 +56,11 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container">
         @yield('content')
     </div>
 
 
 </body>
+
 </html>

@@ -28,11 +28,11 @@
         </div>
         <div class="col-sm text-end">
           <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning me-3" data-bs-toggle="modal" data-bs-target="#editModal" data-id="
-          {{ $product->id }}" 
-          data-name="{{ $product->name }}" 
-          data-description="{{ $product->description }}" 
-          data-price="{{ $product->price }}">
-          Edit</a>
+          {{ $product->id }}"
+            data-name="{{ $product->name }}"
+            data-description="{{ $product->description }}"
+            data-price="{{ $product->price }}">
+            Edit</a>
           <button class="btn btn-sm btn-danger" onclick="confirmProductDelete('{{ $product->id }}')">Delete</button>
           <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: none;">
             @csrf
@@ -47,7 +47,7 @@
 
 <!-- Pagination Links -->
 <div class="mt-3">
-  {{ $products->appends(['search' => request('search')])->links() }}
+  {{ $products->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
 </div>
 
 <!-- Success Message -->
