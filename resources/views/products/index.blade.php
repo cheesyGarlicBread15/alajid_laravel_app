@@ -27,8 +27,13 @@
           <a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a>
         </div>
         <div class="col-sm text-end">
-          <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning me-3" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-description="{{ $product->description }}" data-price="{{ $product->price }}">Edit</a>
-          <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ $product->id }}')">Delete</button>
+          <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning me-3" data-bs-toggle="modal" data-bs-target="#editModal" data-id="
+          {{ $product->id }}" 
+          data-name="{{ $product->name }}" 
+          data-description="{{ $product->description }}" 
+          data-price="{{ $product->price }}">
+          Edit</a>
+          <button class="btn btn-sm btn-danger" onclick="confirmProductDelete('{{ $product->id }}')">Delete</button>
           <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: none;">
             @csrf
             @method('DELETE')
@@ -59,7 +64,7 @@
 
 <!-- JS -->
 <script>
-  function confirmDelete(productId) {
+  function confirmProductDelete(productId) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

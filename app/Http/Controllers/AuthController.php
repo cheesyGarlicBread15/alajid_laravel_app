@@ -24,7 +24,7 @@ class AuthController extends Controller
             'password' => 'required|min:4|confirmed',
         ]);
 
-        $usre = User::create([
+        $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -56,6 +56,6 @@ class AuthController extends Controller
 
     public function logout() {
         session()->forget('user');
-        return redirect('/login')->with('success', 'YOu have been logged out.');
+        return redirect('/login')->with('success', 'You have been logged out.');
     }
 }

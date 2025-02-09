@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app_no_nav')
 
 @section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center">
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="row justify-content-center w-100">
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-body">

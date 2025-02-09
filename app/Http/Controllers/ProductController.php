@@ -16,9 +16,9 @@ class ProductController extends Controller
         // Query the products, applying the search filter if provided
         $products = Product::when($search, function ($query, $search) {
             return $query->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('description', 'like', '%' . $search . '%');
+                ->orWhere('description', 'like', '%' . $search . '%');
         })
-        ->paginate(10); // Paginate with 10 products per page
+            ->paginate(10); // Paginate with 10 products per page
 
         // Return the view with products and the search query
         return view('products.index', compact('products', 'search'));
@@ -38,12 +38,12 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'name' => 'required|max:255',
-        'description' => 'required',
-        'price' => 'required|numeric',
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|numeric',
         ]);
         Product::create($request->all());
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
     // Show the form for editing a product
     public function edit($id)
@@ -67,11 +67,11 @@ class ProductController extends Controller
         $product->description = $validated['description'];
         $product->price = $validated['price'];
         $product->save();
-        return redirect()->route('products.index')->with('success', 'Product updated successfully.');    
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
     // Delete a product
-        public function destroy($id)
-        {
+    public function destroy($id)
+    {
         $product = Product::findOrFail($id);
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');

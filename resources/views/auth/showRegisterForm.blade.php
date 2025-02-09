@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.app_no_nav')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">
@@ -16,7 +16,7 @@
                             </ul>
                         </div>
                     @endif
-
+                    
                     <form action="{{ route('auth.register') }}" method="POST">
                         @csrf
                         <div class="mb-3">
