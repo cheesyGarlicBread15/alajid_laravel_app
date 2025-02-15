@@ -24,6 +24,7 @@
         <div class="col-sm">
           <a href="{{ route('users.show', $user->id) }}">{{ $user->first_name . ' ' . $user->last_name}}</a>
         </div>
+        @if(Auth::check() && Auth::user()->role === 'Admin')
         <div class="col-sm text-end">
           <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-warning me-3" data-bs-toggle="modal" data-bs-target="#editModal" data-id="
           {{ $user->id }}"
@@ -36,6 +37,7 @@
             @method('DELETE')
           </form>
         </div>
+        @endif
       </div>
     </div>
   </li>

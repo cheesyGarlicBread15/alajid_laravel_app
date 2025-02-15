@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
+use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +73,7 @@ class UserController extends Controller
                 $user->password = bcrypt($validated['newPassword']);
             }
             $user->save();
-
+            LogHelper::createLog('Edit', 'Edited account ' . $user->first_name . ' ' . $user->last_name);
             return redirect()->route('users.index')->with('success', 'User updated successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -86,17 +88,24 @@ class UserController extends Controller
         $this->checkAdmin();
         $user = User::findOrFail($id);
         $user->delete();
+        LogHelper::createLog('Delete', 'Deleted account ' . $user->first_name .' '. $user->last_name);
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 
     public function checkAdmin()
     {
-        if (session('user')->role != 'Admin') {
-            abort(403);
-        }
-
-        // if (!Auth::check() || Auth::user()->role !== 'Admin') {
-        //     abort(403, 'Unauthorized action.');
+        // if (session('user')->role != 'Admin') {
+        //     abort(403);
         // }
+
+        if (!Auth::check() || Auth::user()->role !== 'Admin') {
+            abort(403, 'Unauthorized action.');
+        }
+    }
+
+    public function logs(Request $request)
+    {
+        $logs = Log::orderBy('created_at', 'desc')->paginate(20);
+        return view('users.logs', compact('logs'));
     }
 }

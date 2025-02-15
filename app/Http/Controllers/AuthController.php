@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Stmt\TryCatch;
 
@@ -36,6 +38,8 @@ class AuthController extends Controller
                 'password' => bcrypt($request->password),
                 'role' => $request->role,
             ]);
+            // dd($user->id);
+            LogHelper::createLog('Register', $user->first_name . ' ' . $user->first_name . ' registered successfully', $user->id);
             return redirect('/login')->with('success', 'Registration successful! Please log in.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -52,7 +56,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
-            session(['user' => $user]);
+            // manual?
+            // session(['user' => $user]);
+
+            Auth::login($user);
+            LogHelper::createLog('Login', 'User has login');
             return redirect()->route('products.index')->with('success', 'Login successful!');
 
             // with route which is above, use named route, without use uri
@@ -64,7 +72,10 @@ class AuthController extends Controller
 
     public function logout()
     {
-        session()->forget('user');
+        // TODO: implement additoinal logging for: edit, delete, register, and create
+        LogHelper::createLog('Logout', 'User has logged out');
+        // session()->forget('user');
+        Auth::logout();
         return redirect()->route('auth.showLoginForm')->with('success', 'You have been logged out.');
     }
 }

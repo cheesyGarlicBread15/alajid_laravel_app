@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script>
         function confirmLogout() {
+            console.log('??');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You will be logged out!",
@@ -85,10 +86,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('users.index') }}">Users</a>
                     </li>
+                    @if(Auth::check() && Auth::user()->role === 'Admin')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('users.logs') }}">Logs</a>
+                    </li>
+                    @endif
                 </ul>
 
                 <!-- Push Logout button towards right but not too far -->
                 <div class="ms-auto me-4 d-flex align-items-center">
+                    <span class="me-3">Hello, {{ Auth::user()->first_name }}!</span>
                     <button class="btn btn-danger" onclick="confirmLogout()">Logout</button>
                 </div>
             </div>

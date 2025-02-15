@@ -14,6 +14,7 @@
         </div>
         <div class="card-footer">
             <a href="{{ route('users.index') }}" class="btn btn-secondary">Back to User List</a>
+            @if(Auth::check() && Auth::user()->role === 'Admin')
             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">Edit</a>
 
             <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline"
@@ -22,6 +23,7 @@
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">Delete User</button>
             </form>
+            @endif
         </div>
     </div>
 </div>
