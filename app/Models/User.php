@@ -23,6 +23,11 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'avatar',
+        'is_verified',
+        'verification_token',
+        'two_factor_code',
+        'two_factor_expires_at'
     ];
 
     /**
