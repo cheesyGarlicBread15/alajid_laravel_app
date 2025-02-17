@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\LogHelper;
+use App\Mail\TwoFactorCodeMail;
 use App\Mail\VerifyEmail as MailVerifyEmail;
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -43,6 +44,7 @@ class AuthController extends Controller
                 'role' => $request->role,
                 'verification_token' => Str::random(64),
             ]);
+            // dd($user->verification_token);
             Mail::to($user->email)->send(new MailVerifyEmail($user));
             LogHelper::createLog('Register', $user->first_name . ' ' . $user->first_name . ' registered successfully', $user->id);
             return redirect('/login')->with('success', 'A verification link has been sent to your email.');
@@ -63,34 +65,32 @@ class AuthController extends Controller
         if ($user && Hash::check($request->password, $user->password)) {
             // manual?
             // session(['user' => $user]);
-            if (!($this->authenticated($request, $user))) {
-                return redirect()->route(route: 'auth.showLoginForm')->with('error', 'Please verify your email before logging in.');
-            }
-
-            Auth::login($user);
-
-            // update last_login
-            $user->last_login = now();
-            $user->save();
-
-            LogHelper::createLog('Login', 'User has login');
-
-            return redirect()->route('products.index')->with('success', 'Login successful!');
-
-            // with route which is above, use named route, without use uri
-            // return redirect('products');
+            Auth::login(user: $user);
+            return $this->authenticated($request, $user);
         }
         // TODO: fix error when login fails, must show error on login
         return back()->withErrors(['email' => 'Invalid email or password.'])->withInput();
     }
 
-    protected function authenticated(Request $request, $user) {
+    protected function authenticated(Request $request, $user)
+    {
         if (!$user->is_verified) {
             Auth::logout();
-            return false;
+            return redirect()->route(route: 'auth.showLoginForm')->with('error', 'Please verify your email before logging in.');
         }
-        return true;
+
+        if ($user->two_factor_code === null) {
+            $user->two_factor_code = rand(100000, 999999);
+            $user->two_factor_expires_at = now()->addMinutes(1);
+            $user->save();
+
+            // TODO: switch to smtp gmail instead of mailtrap for actual and real emails
+            Mail::to($user->email)->send(new TwoFactorCodeMail($user));
+        }
+        // Auth::logout();
+        return redirect()->route('2fa.verify.form')->with('message', 'A 2FA code has been sent to your email.');
     }
+
 
     public function logout()
     {

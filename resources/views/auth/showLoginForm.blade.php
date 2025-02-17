@@ -5,7 +5,7 @@
     <div class="row justify-content-center w-100">
         <div class="col-md-6">
             <div class="card shadow">
-                <div class="card-body">
+                <div class="card-body px-4">
                     <h3 class="text-center mb-4">Login</h3>
 
                     @if (session('success'))
@@ -44,6 +44,9 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
+                        </div>
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="{{ route('password.request') }}" class="text-primary">Forgot Password?</a>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Login</button>
