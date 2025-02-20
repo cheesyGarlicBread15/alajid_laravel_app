@@ -68,7 +68,6 @@ class AuthController extends Controller
             Auth::login(user: $user);
             return $this->authenticated($request, $user);
         }
-        // TODO: fix error when login fails, must show error on login
         return back()->withErrors(['email' => 'Invalid email or password.'])->withInput();
     }
 

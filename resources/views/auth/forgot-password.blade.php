@@ -12,6 +12,20 @@
                     <p class="alert alert-success">{{ session('success') }}</p>
                     @endif
 
+                    @if(session('error'))
+                    <p class="alert alert-danger">{{ session('error') }}</p>
+                    @endif
+
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
                     <form action="{{ route('password.email') }}" method="POST">
                         @csrf
                         <div class="mb-3">
