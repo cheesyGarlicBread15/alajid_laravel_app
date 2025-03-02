@@ -27,7 +27,7 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('auth
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.showLoginForm');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('users', [UserController::class])->middleware('auth');
 
 // Users
@@ -38,7 +38,11 @@ Route::put('users/{id}', [UserController::class,'update'])->name('users.update')
 Route::delete('users/{id}', [UserController::class,'destroy'])->name('users.destroy');
 Route::get('logs', [UserController::class, 'logs'])->name('users.logs');
 
-// Email
+// Profile
+Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
+Route::post('profile', [UserController::class, 'profileUpdate'])->name('profile.update');
+
+// Verify Email
 Route::get('/verify-email/{token}', [EmailVerificationController::class, 'verifyEmail'])->name('verify.email');
 
 // Password Reset

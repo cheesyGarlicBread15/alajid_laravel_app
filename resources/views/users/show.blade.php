@@ -7,6 +7,21 @@
             <h2 class="mb-0">User Details</h2>
         </div>
         <div class="card-body">
+            <div class="text-center mb-4">
+                @if($user->avatar)
+                <img src="{{ asset('storage/' . $user->avatar) }}"
+                    class="rounded-circle mb-3"
+                    style="width: 150px; height: 150px; object-fit: cover;"
+                    alt="{{ $user->first_name }}'s avatar"
+                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white\' style=\'width: 150px; height: 150px; font-size: 3rem;\'>{{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}</div>'">
+                @else
+                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white mx-auto mb-3"
+                    style="width: 150px; height: 150px; font-size: 3rem;">
+                    {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
+                </div>
+                @endif
+            </div>
+
             <p><strong>First Name:</strong> {{ $user->first_name }}</p>
             <p><strong>Last Name:</strong> {{ $user->last_name }}</p>
             <p><strong>Email:</strong> {{ $user->email }}</p>
@@ -14,16 +29,6 @@
         </div>
         <div class="card-footer">
             <a href="{{ route('users.index') }}" class="btn btn-secondary">Back to User List</a>
-            @if(Auth::check() && Auth::user()->role === 'Admin')
-            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">Edit</a>
-
-            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline"
-                onsubmit="return confirm('Are you sure you want to delete this user?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger">Delete User</button>
-            </form>
-            @endif
         </div>
     </div>
 </div>

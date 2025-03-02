@@ -14,6 +14,9 @@ class Log extends Model
         'user_id',
         'action',
         'description',
+        'ip',
+        'device_type',
+        'platform'
     ];
 
     public function user()

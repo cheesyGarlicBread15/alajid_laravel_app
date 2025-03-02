@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Jenssegers\Agent\Agent;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Str;
 
@@ -41,12 +42,11 @@ class AuthController extends Controller
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'role' => $request->role,
+                'role' => 'User',
                 'verification_token' => Str::random(64),
             ]);
-            // dd($user->verification_token);
             Mail::to($user->email)->send(new MailVerifyEmail($user));
-            LogHelper::createLog('Register', $user->first_name . ' ' . $user->first_name . ' registered successfully', $user->id);
+            LogHelper::createLog($request, 'Register', 'Registered successfully', $user->id);
             return redirect('/login')->with('success', 'A verification link has been sent to your email.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -61,14 +61,19 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-
+        if (!$user) {
+            return back()->withErrors(['email' => 'Invalid email or password.'])->withInput();
+        }
+        Auth::login(user: $user);
         if ($user && Hash::check($request->password, $user->password)) {
             // manual?
             // session(['user' => $user]);
-            Auth::login(user: $user);
             return $this->authenticated($request, $user);
+        } else {
+            LogHelper::createLog($request, 'Login', 'Failed login attempt');
+            Auth::logout();
+            return back()->withErrors(['email' => 'Invalid email or password.'])->withInput();
         }
-        return back()->withErrors(['email' => 'Invalid email or password.'])->withInput();
     }
 
     protected function authenticated(Request $request, $user)
@@ -80,10 +85,9 @@ class AuthController extends Controller
 
         if ($user->two_factor_code === null) {
             $user->two_factor_code = rand(100000, 999999);
-            $user->two_factor_expires_at = now()->addMinutes(1);
+            $user->two_factor_expires_at = now()->addMinutes(10);
             $user->save();
 
-            // TODO: switch to smtp gmail instead of mailtrap for actual and real emails
             Mail::to($user->email)->send(new TwoFactorCodeMail($user));
         }
         // Auth::logout();
@@ -91,10 +95,9 @@ class AuthController extends Controller
     }
 
 
-    public function logout()
+    public function logout(Request $request)
     {
-        // TODO: implement additoinal logging for: edit, delete, register, and create
-        LogHelper::createLog('Logout', 'User has logged out');
+        LogHelper::createLog($request, 'Logout', 'Logged out');
         // session()->forget('user');
         Auth::logout();
         return redirect()->route('auth.showLoginForm')->with('success', 'You have been logged out.');

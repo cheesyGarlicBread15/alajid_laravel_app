@@ -124,7 +124,7 @@
           </div>
           <div class="mb-3">
             <label for="productPrice" class="form-label">Price</label>
-            <input type="number" class="form-control" id="productPrice" name="price" required>
+            <input type="number" class="form-control" id="productPrice" name="price" max="999999" required>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -157,7 +157,7 @@
           </div>
           <div class="mb-3">
             <label for="newProductPrice" class="form-label">Price</label>
-            <input type="number" class="form-control" id="newProductPrice" name="price" step="0.01" required>
+            <input type="number" class="form-control" id="newProductPrice" name="price" max ="999999" step="0.01" required>
           </div>
           <button type="submit" class="btn btn-primary">Create Product</button>
         </form>

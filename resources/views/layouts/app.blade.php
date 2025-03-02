@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script>
         function confirmLogout() {
-            console.log('??');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You will be logged out!",
@@ -23,7 +22,8 @@
                 confirmButtonText: 'Yes, logout!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "{{ route('auth.logout') }}";
+                    // window.location.href = "{{ route('auth.logout') }}";
+                    document.getElementById('logout-form').submit();
                 }
             })
         }
@@ -78,26 +78,58 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Left-aligned navigation links (not too left) -->
+                <!-- Left-aligned navigation links -->
                 <ul class="navbar-nav ms-4">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('products.index') }}">Products</a>
+                        <a class="nav-link {{ request()->routeIs('products.*') ? 'active fw-bold' : '' }}" href="{{ route('products.index') }}">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.index') }}">Users</a>
+                        <a class="nav-link {{ request()->routeIs('users.index') ? 'active fw-bold' : '' }}" href="{{ route('users.index') }}">Users</a>
                     </li>
                     @if(Auth::check() && Auth::user()->role === 'Admin')
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.logs') }}">Logs</a>
+                        <a class="nav-link {{ request()->routeIs('users.logs') ? 'active fw-bold' : '' }}" href="{{ route('users.logs') }}">Logs</a>
                     </li>
                     @endif
                 </ul>
+                <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
 
-                <!-- Push Logout button towards right but not too far -->
                 <div class="ms-auto me-4 d-flex align-items-center">
-                    <span class="me-3">Hello, {{ Auth::user()->first_name }}!</span>
-                    <button class="btn btn-danger" onclick="confirmLogout()">Logout</button>
+                    <div class="dropdown">
+                        <button class="btn btn-link p-0 dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(Auth::user()->avatar)
+                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                class="rounded-circle"
+                                style="width: 40px; height: 40px; object-fit: cover;"
+                                alt="{{ Auth::user()->first_name }}'s avatar"
+                                onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white\' style=\'width: 40px; height: 40px;\'>{{ strtoupper(substr(Auth::user()->first_name, 0, 1) . substr(Auth::user()->last_name, 0, 1)) }}</div>'">
+                            @else
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px;">
+                                {{ strtoupper(substr(Auth::user()->first_name, 0, 1) . substr(Auth::user()->last_name, 0, 1)) }}
+                            </div>
+                            @endif
+                            <span class="ms-2">{{ Auth::user()->first_name }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('users.profile') }}">
+                                    <i class="fas fa-user me-2"></i>Profile
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); confirmLogout();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
         </div>
     </nav>

@@ -13,14 +13,6 @@
         </div>
         <div class="card-footer">
             <a href="{{ route('products.index') }}" class="btn btn-secondary">Back to Product List</a>
-            <!-- TODO: implemenet modal edit and delete in both products and users -->
-            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
-            <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline"
-                onsubmit="return confirm('Are you sure you want to delete this product?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger">Delete Product</button>
-            </form>
         </div>
     </div>
 </div>

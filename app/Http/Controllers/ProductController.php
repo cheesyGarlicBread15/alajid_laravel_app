@@ -44,7 +44,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
         ]);
         Product::create($request->all());
-        LogHelper::createLog('Create Product', 'Created product ' . $request['name']);
+        LogHelper::createLog($request, 'Create', 'Created product ' . $request['name']);
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
     // Show the form for editing a product
@@ -69,15 +69,15 @@ class ProductController extends Controller
         $product->description = $validated['description'];
         $product->price = $validated['price'];
         $product->save();
-        LogHelper::createLog('Edit', 'Edited the product ' . $validated['name']);
+        LogHelper::createLog($request, 'Update', 'Edited product ' . $validated['name']);
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
     // Delete a product
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $product = Product::findOrFail($id);
         $product->delete();
-        LogHelper::createLog('Delete', 'Deleted product ' . $product->name);
+        LogHelper::createLog($request, 'Delete', 'Deleted product ' . $product->name);
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }

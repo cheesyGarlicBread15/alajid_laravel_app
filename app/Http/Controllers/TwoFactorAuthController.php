@@ -31,10 +31,11 @@ class TwoFactorAuthController extends Controller
             // originally from AuthController login
             $user->last_login = now();
             $user->save();
-            LogHelper::createLog('Login', 'User has login');
+            LogHelper::createLog($request, 'Login', 'Logged in successfully');
             return redirect()->route('products.index')->with('success', 'Login successful!');
         }
-
+        
+        LogHelper::createLog($request, 'Login', 'Invalid OTP');
         return back()->withErrors(['two_factor_code' => 'Invalid or expired OTP.']);
     }
 }
